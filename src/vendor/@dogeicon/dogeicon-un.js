@@ -1,7 +1,7 @@
 // DogeIcon Compression Library Version 1.0
 // Copyright (c) 2024 DogeOrg. MIT License.
 
-var DogeIcon = (function (exports) {
+var DogeIconUn = (function (exports) {
     'use strict';
 
     // decoding:

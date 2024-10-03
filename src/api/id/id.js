@@ -8,6 +8,11 @@ export async function getIdentity() {
   return client.get('/ident', { mock: mockGetResponse });
 }
 
+export async function refreshIdentity() {
+  const payload = await client.get('/ident', { mock: mockGetResponse });
+  store.updateState({ identityContext: { payload }})
+}
+
 export async function updateIdentity(body) {
   return client.post('/ident', body, { mock: mockUpdateResponse });
 }
