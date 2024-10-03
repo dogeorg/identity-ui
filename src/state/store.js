@@ -12,7 +12,7 @@ class Store {
     this.networkContext = this.networkContext || {
       apiBaseUrl: `${window.location.protocol}//${window.location.hostname}:3000`,
       overrideBaseUrl: false,
-      useMocks: false,
+      useMocks: true,
       forceFailures: false,
       forceDelayInSeconds: 0,
       reqLogs: false,
