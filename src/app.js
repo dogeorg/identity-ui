@@ -31,6 +31,9 @@ import { isUnauthedRoute, hasFlushParam } from "/utils/url-utils.js";
 // Apis
 import { getIdentity } from "/api/id/id.js";
 
+// Components 
+import { createAlert } from "/components/common/alert.js";
+
 // Do this once to set the location of shoelace assets (icons etc..)
 setBasePath("/vendor/@shoelace/cdn@2.14.0/");
 
@@ -70,9 +73,10 @@ class IdentityUI extends LitElement {
 
   async fetchIdentity() {
     try {
-      const res = await getIdentity()
-      if (res) { console.log('GOT IT') }
+      const payload = await getIdentity()
+      store.updateState({ identityContext: { payload }})
     } catch (err) {
+      createAlert('danger', 'Failed to fetch Identity data');
       console.warn('Failed to fetch identity')
     } finally {
       this.ready = true;

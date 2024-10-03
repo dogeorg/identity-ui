@@ -1,9 +1,13 @@
 import ApiClient from '/api/client.js';
 import { store } from '/state/store.js'
-import { mock } from './identity.mocks.js'
+import { mockGetResponse, mockPutResponse } from './identity.mocks.js'
 
 const client = new ApiClient(store.networkContext.apiBaseUrl)
 
 export async function getIdentity() {
-  return client.get('/identity', { mock });
+  return client.get('/identity', { mock: mockGetResponse });
+}
+
+export async function updateIdentity(body) {
+  return client.put('/identity', body, { mock: mockPutResponse });
 }

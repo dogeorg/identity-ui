@@ -5,11 +5,14 @@ class Store {
 
   constructor() {
     this.appContext = this.appContext || {};
+    this.identityContext = {
+      payload: {},
+      lastFetched: null
+    };
     this.networkContext = this.networkContext || {
       apiBaseUrl: `${window.location.protocol}//${window.location.hostname}:3000`,
-      wsApiBaseUrl: `ws://${window.location.hostname}:3000`,
       overrideBaseUrl: false,
-      useMocks: true,
+      useMocks: false,
       forceFailures: false,
       forceDelayInSeconds: 0,
       reqLogs: false,
@@ -103,6 +106,12 @@ class Store {
       this.networkContext = {
         ...this.networkContext,
         ...partialState.networkContext,
+      };
+    }
+    if (partialState.identityContext) {
+      this.identityContext = {
+        ...this.identityContext,
+        ...partialState.identityContext,
       };
     }
     // Other slices..
