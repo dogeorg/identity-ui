@@ -112,4 +112,11 @@ export const styles = css`
     font-size: 1.5rem;
     color: yellow;
   }
+
+  .desc {
+    display: inline-block; 
+    position: relative;
+    bottom: 2rem;
+    font-family: 'Comic Neue';
+  }
 `;

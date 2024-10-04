@@ -60,6 +60,9 @@ class HomeView extends LitElement {
       _HEADING_MAP_MARKER: html`
         <sl-divider style="--spacing: 2rem;"></sl-divider>
         <h3>Map Marker</h3>
+        <span class="desc">
+          <a target="_blank" no-intercept href="https://www.findlatlong.com">Click here to find your lat/long</a>
+        </span>
       `,
       name: html`
         <sl-input name="name" label="Display Name" maxlength="30" required
@@ -122,6 +125,7 @@ class HomeView extends LitElement {
         <div class="header" style="position: relative;">
           <img src="/static/avatar.png" class="hero" />
           <h2 id="title">Edit Identity<span class="gap"> </span></h2>
+          <span class="desc" style="top: -10px">The Dogebox identity data you set here is broadcast across the network of connected Nodes. How you express yourself is up to you.</span>
 
           <sl-divider style="--spacing: 2rem;"></sl-divider>
           
