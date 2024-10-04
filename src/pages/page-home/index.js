@@ -6,7 +6,6 @@ import { asyncTimeout } from "/utils/timeout.js";
 import { createAlert } from "/components/common/alert.js";
 import { countries } from './fixture-countries.js';
 import { styles } from './styles.js';
-import "/components/views/map-marker.js";
 
 class HomeView extends LitElement {
 
