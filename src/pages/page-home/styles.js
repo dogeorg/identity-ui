@@ -106,4 +106,10 @@ export const styles = css`
     transform-origin: center center;
     transform: rotate(18deg) translateX(-50%);
   }
+
+  h3 {
+    font-family: 'Comic Neue';
+    font-size: 1.5rem;
+    color: yellow;
+  }
 `;

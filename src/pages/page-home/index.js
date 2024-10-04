@@ -27,11 +27,14 @@ class HomeView extends LitElement {
     this.hasNewIcon = false;
 
     this.enabledFields = [
+      '_HEADING_DESCRIBE',
       'icon',
       'name',
       'bio',
+      '_HEADING_LOCATION',
       'country',
       'city',
+      '_HEADING_MAP_MARKER',
       'lat',
       'long',
     ]
@@ -46,6 +49,17 @@ class HomeView extends LitElement {
 
   render() {
     const formFields = {
+      _HEADING_DESCRIBE: html`
+        <h3>About you</h3>
+      `,
+      _HEADING_LOCATION: html`
+        <sl-divider style="--spacing: 2rem;"></sl-divider>
+        <h3>Location</h3>
+      `,
+      _HEADING_MAP_MARKER: html`
+        <sl-divider style="--spacing: 2rem;"></sl-divider>
+        <h3>Map Marker</h3>
+      `,
       name: html`
         <sl-input name="name" label="Display Name" maxlength="30" required
           .value=${this.payload.name || ''}
@@ -55,8 +69,6 @@ class HomeView extends LitElement {
         <sl-textarea name="bio" label="Short Biography" maxlength="120" rows="3"
           .value=${this.payload.bio || ''}
           @sl-input=${this._handleChange}></sl-textarea>
-
-          <sl-divider style="--spacing: 2rem;"></sl-divider>
       `,
       country: html`
         <sl-select name="country" label="Country" clearable
@@ -74,7 +86,6 @@ class HomeView extends LitElement {
           @sl-input=${this._handleChange}></sl-input>
       `,
       lat: html`
-        <sl-divider style="--spacing: 2rem;"></sl-divider>
         <sl-input name="lat" type="number" label="Latitude" 
           min="-90" max="90"
           help-text="WGS84 +/- 90 degrees, 60 seconds (accurate to 1850m)"
@@ -130,7 +141,13 @@ class HomeView extends LitElement {
 
   _handleChange(event) {
     const name = event.target.name;
-    const value = event.target.value;
+    let value = event.target.value;
+    
+    // Convert lat and long to numbers
+    if (name === 'lat' || name === 'long') {
+      value = value === '' ? null : parseFloat(value);
+    }
+    
     this.changes = { ...this.changes, [name]: value };
   }
 
@@ -150,7 +167,7 @@ class HomeView extends LitElement {
           const options = 1 + 4 + 24; // linear + weighted average
           const compressed = DogeIcon.compress(imageData.data, 4, options);
           
-          // Store the compressed UInt8Array directly
+          // Store the compressed result (an array) on changes object
           this.changes = { ...this.changes, icon: compressed.comp };
           
           // Set flag to indicate we have a new icon
@@ -219,6 +236,15 @@ class HomeView extends LitElement {
     event.preventDefault();
     const data = { ...this.payload, ...this.changes };
 
+    // Base64 encode compressed icon.
+    if (data.icon) {
+      data.icon = btoa(String.fromCharCode.apply(null, data.icon));
+    }
+
+    // Ensure lat and long are numbers or null
+    data.lat = data.lat === '' ? null : parseFloat(data.lat);
+    data.long = data.long === '' ? null : parseFloat(data.long);
+
     try {
       this.inflight = true;
       await asyncTimeout(1200);
@@ -240,7 +266,7 @@ class HomeView extends LitElement {
       console.error('Error updating identity:', err);
     } finally {
       this.inflight = false; // stop loading spinner
-      this.hasNewIcon = true; // reset flag (triggers icon redraw)
+      this.hasNewIcon = false; // reset flag (triggers icon redraw)
     }
   }
 }
