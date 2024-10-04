@@ -31,7 +31,6 @@ export const styles = css`
     width: 150px;
     position: relative;
     margin-bottom: -10px;
-    background: #c8b069;
     border-radius: 150px;
   }
 
@@ -71,7 +70,7 @@ export const styles = css`
     font-size: 0.8rem;
     font-weight: normal;
     color: black;
-    background-color: #c8b069;
+    background-color: yellow;
     display: inline-block;
     padding: 0.1em 1em;
     cursor: pointer;
@@ -79,7 +78,7 @@ export const styles = css`
   }
 
   label[for="icon-upload"]:hover {
-    background-color: #f2dea0;
+    background-color: #f2f276;
   }
 
   .help-text {
