@@ -10,7 +10,7 @@ class Store {
       lastFetched: null
     };
     this.networkContext = this.networkContext || {
-      apiBaseUrl: `${window.location.protocol}//${window.location.hostname}:8099`,
+      apiBaseUrl: window.location.origin,
       overrideBaseUrl: false,
       useMocks: false,
       forceFailures: false,
