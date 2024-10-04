@@ -6,6 +6,7 @@ import { asyncTimeout } from "/utils/timeout.js";
 import { createAlert } from "/components/common/alert.js";
 import { countries } from './fixture-countries.js';
 import { styles } from './styles.js';
+import "/components/views/map-marker.js";
 
 class HomeView extends LitElement {
 
@@ -86,16 +87,16 @@ class HomeView extends LitElement {
           @sl-input=${this._handleChange}></sl-input>
       `,
       lat: html`
-        <sl-input name="lat" type="number" label="Latitude" 
-          min="-90" max="90"
-          help-text="WGS84 +/- 90 degrees, 60 seconds (accurate to 1850m)"
+        <sl-input name="lat" type="text" label="Latitude" 
+          pattern="^-?([0-8]?[0-9](\.[0-9]*)?|90(\.0*)?)$"
+          help-text="WGS84 +/- 90 degrees (eg: 55.3)"
           .value=${this.payload.lat || ''}
           @sl-input=${this._handleChange}></sl-input>
       `,
       long: html`
-        <sl-input name="long" type="number" label="Longitude"
-          min="-180" max="180"
-          help-text="WGS84 +/- 180 degrees, 60 seconds (accurate to 1850m)"
+        <sl-input name="long" type="text" label="Longitude"
+          pattern="^-?(([0-9]|[1-9][0-9]|1[0-7][0-9])(\.[0-9]*)?|180(\.0*)?)$"
+          help-text="WGS84 +/- 180 degrees (eg: -174.3)"
           .value=${this.payload.long || ''}
           @sl-input=${this._handleChange}></sl-input>
       `,
@@ -113,15 +114,15 @@ class HomeView extends LitElement {
           <input id="icon-upload" type="file" name="icon" accept="image/*" @change=${this._handleFileChange}>
           <sl-button variant="text" size="small" @click=${this._handleRemoveImage}>Remove</sl-button>
         </div>
-        <div class="help-text">(Optional)</div>
       `
     };
 
     return html`
       <div class="form-container">
-        <div class="header">
+        <div class="header" style="position: relative;">
           <img src="/static/avatar.png" class="hero" />
           <h2 id="title">Edit Identity<span class="gap"> </span></h2>
+
           <sl-divider style="--spacing: 2rem;"></sl-divider>
           
           <sl-alert variant="warning" open style="text-align:left" closable>
@@ -223,7 +224,6 @@ class HomeView extends LitElement {
 
   }
 
-
   _handleRemoveImage(event) {
     event.preventDefault();
     this.iconCleared = true;
@@ -235,6 +235,15 @@ class HomeView extends LitElement {
   async _handleSubmit(event) {
     event.preventDefault();
     const data = { ...this.payload, ...this.changes };
+
+    // Check if any field is invalid
+    const formFields = this.shadowRoot.querySelectorAll('sl-input, sl-textarea, sl-select');
+    const hasInvalidField = Array.from(formFields).some(field => field.hasAttribute('data-invalid'));
+
+    if (hasInvalidField) {
+      createAlert('warning', 'Uh oh, invalid data detected.');
+      return;
+    }
 
     // Base64 encode compressed icon.
     if (data.icon) {
