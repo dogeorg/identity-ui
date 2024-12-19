@@ -194,7 +194,7 @@ class HomeView extends LitElement {
     const canvas = this.shadowRoot.querySelector('#icon-canvas');
     if (canvas) {
       const ctx = canvas.getContext('2d', { colorSpace: "srgb" });
-      const uncompressed = DogeIconUn.uncompress(compressedData);
+      const uncompressed = DogeIcon.uncompress(compressedData);
       
       if (uncompressed.length !== 48 * 48 * 3) {
         console.error('Unexpected uncompressed data length', uncompressed.length);
